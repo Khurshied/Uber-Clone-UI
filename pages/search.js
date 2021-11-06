@@ -1,7 +1,14 @@
+import { useState } from 'react';
 import React from 'react';
 import tw from 'tailwind-styled-components';
 import Link from 'next/link';
-function Search(props) {
+const Search = () => {
+  const [pickup, setPickup] = useState('');
+  const [dropoff, setDropoff] = useState('');
+
+  console.log(pickup);
+  console.log(dropoff);
+
   return (
     <Wrapper>
       {/*Button Container*/}
@@ -30,8 +37,16 @@ function Search(props) {
           />
         </FromToIcons>
         <InputBoxes>
-          <Input placeholder={'Enter Pickup Location'} />
-          <Input placeholder={'Where To?'} />
+          <Input
+            placeholder={'Enter Pickup Location'}
+            value={pickup}
+            onChange={(e) => setPickup(e.target.value)}
+          />
+          <Input
+            placeholder={'Where To?'}
+            value={dropoff}
+            onChange={(e) => setDropoff(e.target.value)}
+          />
         </InputBoxes>
         <PlusIcon src={'https://img.icons8.com/ios/50/000000/plus-math.png'} />
       </InputContainer>
@@ -41,12 +56,23 @@ function Search(props) {
         />
         Saved Places
       </SavedPlaces>
-      <ConfirmButtonContainer>
-        <ConfirmButton>Confirm Locations</ConfirmButton>
-      </ConfirmButtonContainer>
+
+      <Link
+        href={{
+          pathname: '/confirm',
+          query: {
+            pickup: pickup,
+            dropoff: dropoff,
+          },
+        }}
+      >
+        <ConfirmButtonContainer>
+          <ConfirmButton>Confirm Locations</ConfirmButton>
+        </ConfirmButtonContainer>
+      </Link>
     </Wrapper>
   );
-}
+};
 const Wrapper = tw.div`
 bg-gray-200 h-screen
 `;
@@ -54,7 +80,7 @@ const ButtonContainer = tw.div`
 bg-white px-4
 `;
 const BackButton = tw.img`
-h-12
+h-12 cursor-pointer
 `;
 
 const InputContainer = tw.div`bg-white flex items-center px-4 mb-2`;
@@ -73,6 +99,6 @@ const PlusIcon = tw.img`w-10 h-10 bg-gray-200 rounded-full ml-2 p-1`;
 const SavedPlaces = tw.div`flex items-center bg-white px-4 py-2 mb-4`;
 const StarIcon = tw.img`bg-gray-400 w-10 h-10 p-2 rounded-full mr-2`;
 
-const ConfirmButtonContainer = tw.div`flex`;
 const ConfirmButton = tw.button`bg-black text-white flex-1 h-12`;
 export default Search;
+const ConfirmButtonContainer = tw.div`flex bg-black text-white text-center`;
