@@ -1,7 +1,33 @@
+import { useEffect,useState } from 'react';
 import tw from 'tailwind-styled-components';
 import Map from './components/Map';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import {auth} from '../firebase';
+import { onAuthStateChanged, signOut } from '@firebase/auth';
+
 export default function Home() {
+
+
+  const [user, setUser] = useState(null)
+  const router = useRouter()
+
+   useEffect(() => {
+     
+     return onAuthStateChanged (auth,user => {
+       if(user){
+         setUser({
+           name:user.displayName,
+           photo: user.photoURL
+         })
+       }
+       else{
+         setUser(null)
+         router.push('/login')
+       }
+     })
+   }, [])
+  
   return (
     <Wrapper>
       <Map></Map>
@@ -11,9 +37,9 @@ export default function Home() {
             src={'https://i.ibb.co/84stgjq/uber-technologies-new-20218114.jpg'}
           />
           <Profile>
-            <Name>Khursheed Ahmad</Name>
+            <Name>{user && user.name}</Name>
             <UserImage
-              src={'https://avatars.githubusercontent.com/u/5436488?v=4'}
+              src={user && user.photoURL} onClick={() => signOut(auth)}
             />
           </Profile>
         </Header>
@@ -66,7 +92,7 @@ mr-4 text-sm
 `;
 
 const UserImage = tw.img`
-h-16 rounded-full border border-gray-200 p-2
+h-16 rounded-full border border-gray-200 p-2 cursor-pointer
 `;
 
 const ActionButtons = tw.div`
