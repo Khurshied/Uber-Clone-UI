@@ -19,7 +19,7 @@ const Login = () => {
     <Wrapper>
       <UberLogo src="" />
 
-      <Title>Login to access uyour account</Title>
+      <Title>Login to access your account</Title>
       <HeadImage src="" />
       <SignInButton onClick={()=>signInWithPopup(auth, provider)}>Sign In With Google...</SignInButton>
     </Wrapper>
